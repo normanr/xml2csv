@@ -1,0 +1,12 @@
+application: xml2csv
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /favicon.gif
+  static_files: favicon.gif
+  upload: favicon.gif
+
+- url: .*
+  script: main.py
