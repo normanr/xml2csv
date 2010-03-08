@@ -4,9 +4,9 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /(favicon\.gif|robots\.txt|googleca0be0b46b6e1ec9\.html)
+- url: /(favicon\.(ico|gif)|robots\.txt|googleca0be0b46b6e1ec9\.html)
   static_files: \1
-  upload: (favicon\.gif|robots\.txt|googleca0be0b46b6e1ec9\.html)
+  upload: (favicon\.(ico|gif)|robots\.txt|googleca0be0b46b6e1ec9\.html)
 
 - url: .*
   script: main.py
