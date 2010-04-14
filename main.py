@@ -92,6 +92,8 @@ class MainHandler(webapp.RequestHandler):
       self.response.out.write(template.render('index.html', {'url':'http://'}))
       return
     data = urlfetch.fetch(url).content
+    data = data.replace('&nbsp;', u'\xa0'.encode('utf-8'))
+    data = data.replace('&copy;', u'\xa9'.encode('utf-8'))
     xml = ElementTree()
     xml.parse(StringIO(data))
     headeroutput = renderHeader(groups, xpaths)
