@@ -16,9 +16,14 @@
 #
 
 
+import cgi
 import urllib
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
+
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+
 from google.appengine.api import urlfetch
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -75,9 +80,10 @@ def renderTree(nodes, path, indent):
   for e in nodes:
     children = e.getchildren()
     filter = 'group' if children else 'xpath'
-    link = path % filter + urllib.quote_plus(e.tag)
-    r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br/>\n' % (link, e.tag, e.text))
-    r.append(renderTree(children, path + e.tag + '/', indent + 1))
+    link = '%s&%s=%s' % (path, filter, urllib.quote_plus(e.tag))
+    r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br/>\n' % (
+        cgi.escape(link, True), cgi.escape(e.tag, True), cgi.escape(str(e.text))))
+    r.append(renderTree(children, path + urllib.quote_plus(e.tag) + '/', indent + 1))
   return ''.join(r)
 
 class MainHandler(webapp.RequestHandler):
@@ -105,13 +111,13 @@ class MainHandler(webapp.RequestHandler):
       self.response.headers['Content-Disposition'] = 'filename=xml.csv'
       if header:
         self.response.out.write(headeroutput + '\n')
-      self.response.out.write(output)
+      self.response.out.write(output + '\n')
       return
     link = 'url=%s%s%s' % (
         urllib.quote_plus(url),
-        ''.join(['&amp;group=%s' % group for group in groups]),
-        ''.join(['&amp;xpath=%s' % xpath for xpath in xpaths]))
-    path = '?browse=1&amp;%s&amp;%%s=' % link.replace('%', '%%')
+        ''.join(['&group=%s' % urllib.quote_plus(group) for group in groups]),
+        ''.join(['&xpath=%s' % urllib.quote_plus(xpath) for xpath in xpaths]))
+    path = '?browse=1&' + link
     self.response.out.write(template.render(
         'index.html', {
             'url':url,
