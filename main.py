@@ -89,7 +89,7 @@ class MainHandler(webapp.RequestHandler):
     groups = self.request.get_all('group')
     xpaths = self.request.get_all('xpath')
     if not url:
-      self.response.out.write(template.render('index.html', {'url':'http://'}))
+      self.response.out.write(template.render('index.html', None))
       return
     data = urlfetch.fetch(url).content
     data = data.replace('&nbsp;', u'\xa0'.encode('utf-8'))
