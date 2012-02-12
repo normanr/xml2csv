@@ -91,6 +91,8 @@ class MainHandler(webapp.RequestHandler):
     if not url:
       self.response.out.write(template.render('index.html', None))
       return
+    if url.startswith('http%3A%2F%2F') or url.startswith('https%3A%2F%2F'):
+      url = urllib.unquote(url)
     data = urlfetch.fetch(url).content
     data = data.replace('&nbsp;', u'\xa0'.encode('utf-8'))
     data = data.replace('&copy;', u'\xa9'.encode('utf-8'))
