@@ -1,39 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link rel="icon" type="image/gif" href="/favicon.gif" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="icon" type="image/gif" href="/favicon.gif">
     <title>XML 2 CSV</title>
   </head>
   <body>
     <h1>XML 2 CSV</h1>
-    <hr/>
-    <form method="get" action="">
+    <hr>
+    <form method="get">
       <p>
-      <input type="hidden" name="browse" value="1"/>
+      <input type="hidden" name="browse" value="1">
       <label for="url">
       <span class="label">URL:</span>
-      <input type="text" name="url" value="{{ url }}" id="url" placeholder="http://www.example.com/data.xml" style="width: 90%"/></label><br/>
-      <input type="submit" value="Browse"/>
+      <input type="text" name="url" value="{{ url }}" id="url" placeholder="http://www.example.com/data.xml" style="width: 90%"></label><br>
+      <input type="submit" value="Browse">
       </p>
     </form>
     {% if output %}
-    <hr/>
+    <hr>
     <h3>Output:</h3>
-    <p><b>{{ header }}</b><br/>{{ output }}</p>
+    <p><b>{{ header }}</b><br>{{ output }}</p>
     <p>Permalinks: <a href="?{{ link }}">without header</a>, <a href="?header=1&amp;{{ link }}">with header</a></p>
     {% endif %}
     {% if browse %}
-    <hr/>
+    <hr>
     <h3>{% if output %}Add{% else %}Choose{% endif %} value:</h3>
     <p>{{ browse|safe }}</p>
     {% endif %}
-    <hr/>
+    <hr>
     <p>
-      <a href="http://validator.w3.org/check?uri=referer"><img
-          src="http://www.w3.org/Icons/valid-xhtml10" style="border: none"
-          alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
+      <a href="http://www.w3.org/html/logo/"><img
+          src="http://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
+          width="63" height="64" alt="HTML5 Powered" title="HTML5 Powered"></a>
     </p>
   </body>
 </html>

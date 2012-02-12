@@ -81,7 +81,7 @@ def renderTree(nodes, path, indent):
     children = e.getchildren()
     filter = 'group' if children else 'xpath'
     link = '%s&%s=%s' % (path, filter, urllib.quote_plus(e.tag))
-    r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br/>\n' % (
+    r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br>\n' % (
         cgi.escape(link, True), cgi.escape(e.tag, True), cgi.escape(str(e.text))))
     r.append(renderTree(children, path + urllib.quote_plus(e.tag) + '/', indent + 1))
   return ''.join(r)
@@ -122,7 +122,7 @@ class MainHandler(webapp.RequestHandler):
         'index.html', {
             'url':url,
             'header':headeroutput,
-            'output':output.replace('\n','<br/>\n'),
+            'output':output.replace('\n','<br>\n'),
             'link':link,
             'browse':renderTree(xml.getroot().getchildren(), path, 0)}))
 
