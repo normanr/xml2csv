@@ -82,7 +82,7 @@ def renderTree(nodes, path, indent):
     filter = 'group' if children else 'xpath'
     link = '%s&%s=%s' % (path, filter, urllib.quote_plus(e.tag))
     r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br>\n' % (
-        cgi.escape(link, True), cgi.escape(e.tag, True), cgi.escape(str(e.text))))
+        cgi.escape(link, True), cgi.escape(e.tag, True), cgi.escape(unicode(e.text))))
     r.append(renderTree(children, path + urllib.quote_plus(e.tag) + '/', indent + 1))
   return ''.join(r)
 
@@ -99,6 +99,10 @@ class MainHandler(webapp.RequestHandler):
       return
     if url.startswith('http%3A%2F%2F') or url.startswith('https%3A%2F%2F'):
       url = urllib.unquote(url)
+    if url.startswith('='):
+      url = url[1:]
+    if '://' not in url:
+      url = 'http://' + url
     data = urlfetch.fetch(url).content
     data = data.replace('&nbsp;', u'\xa0'.encode('utf-8'))
     data = data.replace('&copy;', u'\xa9'.encode('utf-8'))
