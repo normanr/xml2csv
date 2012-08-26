@@ -1,4 +1,4 @@
-application: xml2csv
+application: xml2csv-hrd
 version: 3
 runtime: python
 api_version: 1
