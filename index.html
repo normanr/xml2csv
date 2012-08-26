@@ -20,7 +20,7 @@
     {% if output %}
     <hr>
     <h3>Output:</h3>
-    <p><b>{{ header }}</b><br>{{ output }}</p>
+    <p style="white-space:pre-wrap"><b>{{ header }}</b><br>{{ output }}</p>
     <p>Permalinks: <a href="?{{ link }}">without header</a>, <a href="?header=1&amp;{{ link }}">with header</a></p>
     {% endif %}
     {% if browse %}

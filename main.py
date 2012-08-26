@@ -80,10 +80,10 @@ def renderTree(nodes, path, indent):
   for e in nodes:
     children = e.getchildren()
     filter = 'group' if children else 'xpath'
-    link = '%s&%s=%s' % (path, filter, urllib.quote_plus(e.tag))
+    link = path % filter + urllib.quote_plus(e.tag)
     r.append('&nbsp;' * indent * 4 + '<a href="%s">%s</a> = %s<br>\n' % (
         cgi.escape(link, True), cgi.escape(e.tag, True), cgi.escape(unicode(e.text))))
-    r.append(renderTree(children, path + urllib.quote_plus(e.tag) + '/', indent + 1))
+    r.append(renderTree(children, path + urllib.quote_plus(e.tag + '/').replace('%', '%%'), indent + 1))
   return ''.join(r)
 
 class MainHandler(webapp.RequestHandler):
@@ -121,12 +121,12 @@ class MainHandler(webapp.RequestHandler):
         urllib.quote_plus(url),
         ''.join(['&group=%s' % urllib.quote_plus(group) for group in groups]),
         ''.join(['&xpath=%s' % urllib.quote_plus(xpath) for xpath in xpaths]))
-    path = '?browse=1&' + link
+    path = '?browse=1&' + link.replace('%', '%%') + '&%s='
     self.response.out.write(template.render(
         'index.html', {
             'url':url,
             'header':headeroutput,
-            'output':output.replace('\n','<br>\n'),
+            'output':output,
             'link':link,
             'browse':renderTree(xml.getroot().getchildren(), path, 0)}))
 
