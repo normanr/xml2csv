@@ -1,7 +1,15 @@
 application: xml2csv-hrd
 version: 3
-runtime: python
+runtime: python27
 api_version: 1
+threadsafe: true
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'settings'
+
+libraries:
+- name: django
+  version: 1.3
 
 handlers:
 - url: /(favicon\.(ico|gif)|robots\.txt|googleca0be0b46b6e1ec9\.html)
@@ -9,4 +17,4 @@ handlers:
   upload: (favicon\.(ico|gif)|robots\.txt|googleca0be0b46b6e1ec9\.html)
 
 - url: .*
-  script: main.py
+  script: main.application

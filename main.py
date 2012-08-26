@@ -19,15 +19,11 @@
 import cgi
 import urllib
 from StringIO import StringIO
+import webapp2
 from xml.etree.ElementTree import ElementTree
 
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
+from django.template.loader import render_to_string
 from google.appengine.api import urlfetch
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-from google.appengine.ext.webapp import util
 
 
 def renderGroup(xpaths, xml):
@@ -86,7 +82,7 @@ def renderTree(nodes, path, indent):
     r.append(renderTree(children, path + urllib.quote_plus(e.tag + '/').replace('%', '%%'), indent + 1))
   return ''.join(r)
 
-class MainHandler(webapp.RequestHandler):
+class MainHandler(webapp2.RequestHandler):
 
   def get(self):
     url = self.request.get('url')
@@ -95,7 +91,7 @@ class MainHandler(webapp.RequestHandler):
     groups = self.request.get_all('group')
     xpaths = self.request.get_all('xpath')
     if not url:
-      self.response.out.write(template.render('index.html', None))
+      self.response.out.write(render_to_string('index.html', None))
       return
     if url.startswith('http%3A%2F%2F') or url.startswith('https%3A%2F%2F'):
       url = urllib.unquote(url)
@@ -122,7 +118,7 @@ class MainHandler(webapp.RequestHandler):
         ''.join(['&group=%s' % urllib.quote_plus(group) for group in groups]),
         ''.join(['&xpath=%s' % urllib.quote_plus(xpath) for xpath in xpaths]))
     path = '?browse=1&' + link.replace('%', '%%') + '&%s='
-    self.response.out.write(template.render(
+    self.response.out.write(render_to_string(
         'index.html', {
             'url':url,
             'header':headeroutput,
@@ -131,11 +127,5 @@ class MainHandler(webapp.RequestHandler):
             'browse':renderTree(xml.getroot().getchildren(), path, 0)}))
 
 
-def main():
-  application = webapp.WSGIApplication([('/.*', MainHandler)],
-                                       debug=True)
-  util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-  main()
+application = webapp2.WSGIApplication([('/.*', MainHandler)],
+                                     debug=True)
